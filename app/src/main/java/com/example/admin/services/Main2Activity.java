@@ -50,7 +50,6 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         Intent boundIntent = new Intent(this, MyBindService.class);
         btnPlay.setOnClickListener(this);
         btnPause.setOnClickListener(this);
-        //String p = intent.getStringExtra("text");
         readSum = (TextView) findViewById(R.id.readSum);
         boundIntent.putExtra("text",intent.getStringExtra("number"));
         bindService(boundIntent, serviceConnection, Context.BIND_AUTO_CREATE);

@@ -1,11 +1,15 @@
 package com.example.admin.services;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,13 +22,13 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    Button btnStartNormalService, btnStopNormalService, btnBindService, btnUnbindService, btnIntentService;
+    Button btnStartNormalService, btnStopNormalService, btnBindService, btnUnbindService, btnIntentService, btnJobScheduler;
     MyBindService myBindService;
     boolean isBound = false;
-    Intent normalIntent ;
-    Intent intIntent ;
-    Intent boundIntent ;
-    Intent intent ;
+    Intent normalIntent;
+    Intent intIntent;
+    Intent boundIntent;
+    Intent intent;
     TextView readSum;
 
     ArrayList<String> randomStringList;
@@ -32,12 +36,14 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.ItemAnimator itemAnimator;
     RecyclerView.Adapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void startService(View view) {
         normalIntent = new Intent(this, MyNormalService.class);
         intIntent = new Intent(this, MyIntentService.class);
@@ -69,6 +75,17 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("number", String.valueOf(randomGen.nextInt(100)));
                 startActivity(intent);
                 break;
+            case R.id.btnJobScheduler:
+                Log.d(TAG, "onClick: ");
+                ComponentName serviceComponent = new ComponentName(this, MyJobService.class);
+                JobInfo.Builder jobInfo = new JobInfo.Builder(0, serviceComponent);
+
+                jobInfo.setMinimumLatency(1000);
+                jobInfo.setOverrideDeadline(3 * 1000); // maximum delay
+                Log.d(TAG, "this is my version "+ Build.VERSION.SDK_INT+"  This is the other   "+ android.os.Build.VERSION_CODES.M);
+                JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+                jobScheduler.schedule(jobInfo.build());
+                break;
         }
     }
 
@@ -90,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             Log.d(TAG, "onServiceDisconnected: ");
-            isBound =false;
+            isBound = false;
         }
     };
 }
