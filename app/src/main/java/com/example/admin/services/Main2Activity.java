@@ -30,7 +30,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     MyBindService myBindService;
     Intent intent;
     TextView readSum;
-
+    //////////
     ArrayList<String> randomStringList;
     RecyclerView rvRandomStrings;
     RecyclerView.LayoutManager layoutManager;
