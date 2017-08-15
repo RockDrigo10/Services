@@ -50,5 +50,10 @@
         android:onClick="startService"
         android:text="Pass integer"
         android:id="@+id/btnPassInt"/>
-
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="startService"
+        android:text="Job Scheduler"
+        android:id="@+id/btnJobScheduler"/>
 </LinearLayout>
