@@ -18,7 +18,7 @@ public class MyNormalService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mediaPlayer = MediaPlayer.create(this, R.raw.despacito);
+        mediaPlayer = MediaPlayer.create(this, R.raw.duhast);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
         return START_STICKY;

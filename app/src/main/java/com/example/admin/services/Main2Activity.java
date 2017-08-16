@@ -36,6 +36,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.ItemAnimator itemAnimator;
     RecyclerView.Adapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +52,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         btnPlay.setOnClickListener(this);
         btnPause.setOnClickListener(this);
         readSum = (TextView) findViewById(R.id.readSum);
-        boundIntent.putExtra("text",intent.getStringExtra("number"));
+        boundIntent.putExtra("text", intent.getStringExtra("number"));
         bindService(boundIntent, serviceConnection, Context.BIND_AUTO_CREATE);
         rvRandomStrings = (RecyclerView) findViewById(R.id.rvRandomStrings);
         layoutManager = new LinearLayoutManager(this);
@@ -69,7 +70,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
             int value = Integer.parseInt(intent.getStringExtra("number")) + myBindService.fiveNumber();
             tvSecond.setText(String.valueOf(value));
             isBound = true;
-            randomStringList =  myBindService.getRandomData();
+            randomStringList = myBindService.getRandomData();
             mAdapter = new ArrayAdapter(randomStringList);
             rvRandomStrings.setAdapter(mAdapter);
         }
@@ -89,9 +90,16 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        if(view == btnPlay)
-            startService(new Intent(this,MyNormalService.class));
-        else if(view == btnPause)
-            stopService(new Intent(this,MyNormalService.class));
+        if (view == btnPlay) {
+            startService(new Intent(this, MyNormalService.class));
+            Intent startIntent = new Intent(Main2Activity.this, ForegroundService.class);
+            startIntent.setAction("startForeground");
+            startService(startIntent);
+        } else if (view == btnPause) {
+            stopService(new Intent(this, MyNormalService.class));
+            Intent stopIntent = new Intent(Main2Activity.this, ForegroundService.class);
+            stopIntent.setAction("stopForeground");
+            startService(stopIntent);
+        }
     }
 }
